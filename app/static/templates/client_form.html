@@ -1,0 +1,65 @@
+<form id="dynamicForm">
+    <!-- Required fields -->
+    <input type="text" id="name" name="name" placeholder="Name" required />
+    <input type="number" id="age" name="age" placeholder="Age" required />
+    <input type="email" id="email" name="email" placeholder="Email" required />
+
+    <!-- Custom fields dynamically added by the user -->
+    <div id="customFieldsContainer">
+        <!-- Example custom fields added dynamically -->
+        <input type="text" class="custom-field" name="birth_city" placeholder="Birth City" />
+        <input type="text" class="custom-field" name="favorite_color" placeholder="Favorite Color" />
+    </div>
+
+    <button type="button" id="submitBtn">Submit</button>
+    <script>
+        $('#submitBtn').addEventListener('click', () => {
+            // Collect required fields
+            const formData = {
+                name: document.getElementById('name').value,
+                age: document.getElementById('age').value,
+                email: document.getElementById('email').value,
+                custom_fields: {} // To hold all custom fields
+            };
+
+            // Collect custom fields
+            const customFields = $('.custom-field');
+            customFields.forEach(field => {
+                formData.custom_fields[field.name] = field.value;
+            });
+        
+            // Convert to JSON
+            const jsonData = JSON.stringify(formData);
+        
+            // Send to backend
+            fetch('https://your-fastapi-backend/api', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: jsonData
+            })
+            .then(response => response.json())
+            .then(data => console.log('Success:', data))
+            .catch(error => console.error('Error:', error));
+            <!--
+                $.ajax({    
+                    To edit
+                    url: "https://your-fastapi-backend/api/resource", // Backend API endpoint
+                    method: "GET",
+                    headers: {
+                    "X-Resource-ID": resourceId, // Custom header for resource ID
+                    "Authorization": `Bearer ${sessionToken}` // Token in Authorization header
+                    },
+                    success: function (response) {
+                    console.log("Data received:", response); // Handle success
+                    },
+                    error: function (xhr, status, error) {
+                    console.error("Error:", error); // Handle errors
+                    }
+                });
+                -->
+        });
+    </script>
+    
+</form>

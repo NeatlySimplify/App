@@ -1,82 +1,38 @@
 <div id="sidebar">
     <button type="button" class="btn btn-outline-dark" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="offcanvas"><i class="fa-solid fa-bars fa" aria-hidden="true"></i></button>
     <div class="offcanvas offcanvas-start container-fluid" data-bs-scroll="true" tabindex="-1" id="offcanvas" aria-labelledby="offcanva">
-        <div class="offcanvas-header row">
-            <div class="col-3">
-                <img src="../img/img.jpeg" alt="" class="rounded" width="70px" height="95px">
+        <div class="offcanvas-header row align-content-center">
+            <div class="col-11">
+                <img src="{{ url_for('img', path='owl-seeklogo.svg') }}" alt="" style="height: 100px; width: 100px;" class="mx-auto">
             </div>
-            <div class="col">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">User Data</li>
-                    <li class="list-group-item">Logout</li>
-                    <li class="list-group-item">Name</li>
-                </ul>
+            <div class="col-1">
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            
         </div>
         <div class="offcanvas-body">
             <div class="accordion" id="menuAccordion">
-                <!-- Client -->
+                {% for item, valor in sidebar.items() %}
                 <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingClient">
-                        <button class="accordion-button collapsed menu-item" type="button" data-bs-toggle="collapse" data-bs-target="#collapseClient" aria-expanded="false" aria-controls="collapseClient">
-                            Client
+                    <h2 class="accordion-header" id="heading_{{ item|e }}">
+                        <button class="accordion-button collapsed menu-item" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ item|e }}" aria-expanded="false" aria-controls="collapse{{ item|e }}">
+                            {{ valor['title'] }}
                         </button>
                     </h2>
-                    <div id="collapseClient" class="accordion-collapse collapse" aria-labelledby="headingClient" data-bs-parent="#menuAccordion">
+                    <div id="collapse{{ item|e }}" class="accordion-collapse collapse" aria-labelledby="heading{{ item|e }}" data-bs-parent="#menuAccordion">
                         <div class="accordion-body sub-menu">
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><a href="" class="link-dark link-underline-opacity-0">Pessoa Física</a></li>
-                                <li class="list-group-item"><a href="" class="m-1 link-dark link-underline-opacity-0">Pessoa Jurídica</a></li>
+                                {% if item|e != 'user' %}
+                                <li class="list-group-item"><a href="/all" class="link-dark link-underline-opacity-0">Todos</a></li>
+                                {% endif %}
+                                {% for c, v in valor['children'].items() %}
+                                <li class="list-group-item"><a href="/{{ c|e }}" class="link-dark link-underline-opacity-0">{{ v|e }}</a></li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
                 </div>
-    
-                <!-- Services -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingServices">
-                        <button class="accordion-button collapsed menu-item" type="button" data-bs-toggle="collapse" data-bs-target="#collapseServices" aria-expanded="false" aria-controls="collapseServices">
-                            Services
-                        </button>
-                    </h2>
-                    <div id="collapseServices" class="accordion-collapse collapse" aria-labelledby="headingServices" data-bs-parent="#menuAccordion">
-                        <div class="accordion-body sub-menu">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><a href="" class="link-dark link-underline-opacity-0">Processos</a></li>
-                                <li class="list-group-item"><a href="" class="m-1 link-dark link-underline-opacity-0">Perícias</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-    
-                <!-- Finance -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingFinance">
-                        <button class="accordion-button collapsed menu-item" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFinance" aria-expanded="false" aria-controls="collapseFinance">
-                            Finance
-                        </button>
-                    </h2>
-                    <div id="collapseFinance" class="accordion-collapse collapse" aria-labelledby="headingFinance" data-bs-parent="#menuAccordion">
-                        <div class="accordion-body sub-menu">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><a href="" class="link-dark link-underline-opacity-0">Entry</a></li>
-                                <li class="list-group-item"><a href="" class="m-1 link-dark link-underline-opacity-0">Exit</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <a href="" class="accordion-header d-grid">
-                        <div class="menu-item justify-content-start">
-                            <p>
-                                <a href="" class="btn link-dark link-underline-opacity-0 m-1">Employees</a>
-                            </p>
-                        </div>
-                            
-                    </a>
-                    
-                </div>
+                {% endfor%}
             </div>
             
         </div>

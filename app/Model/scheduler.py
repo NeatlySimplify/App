@@ -10,3 +10,11 @@ class Scheduler(BaseModel):
     fim: datetime
     details: str = ''
     tag_tipo: str
+
+
+class ScheduleTag(str, Enum):
+    FINANCE: str = "Finance"
+    USER: str = "User"
+    SERVICE: str = "Service"
+
+

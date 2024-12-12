@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 import dataclasses
-import datetime
 import edgedb
 import uuid
 
@@ -33,46 +32,20 @@ class CreateUserResult(NoPydanticValidation):
 async def create_user(
     executor: edgedb.AsyncIOExecutor,
     *,
+    name: str,
     email: str,
-    nome: str,
-    sexo: str,
-    estado_civil: str,
-    details: str,
-    tag_tipo: str,
-    nascimento: datetime.datetime,
-    cidade_atual: str,
-    estado_atual: str,
     password: str,
-    telefone: str,
-    endereco: str,
 ) -> CreateUserResult:
     return await executor.query_single(
         """\
         insert User {
+            name := <str>$name,
             email:= <str>$email,
-            nome:= <str>$nome,
-            sexo:= <str>$sexo,
-            estado_civil:= <str>$estado_civil,
-            details:= <str>$details,
-            tag_tipo:= <str>$tag_tipo,
-            nascimento:= <datetime>$nascimento,
-            cidade_atual:= <str>$cidade_atual,
-            estado_atual:= <str>$estado_atual,
             password:= <str>$password,
-            telefone:= <json>$telefone,
-            endereco:= <json>$endereco
+            lastActiveDate:= datetime_of_statement()
         };\
         """,
+        name=name,
         email=email,
-        nome=nome,
-        sexo=sexo,
-        estado_civil=estado_civil,
-        details=details,
-        tag_tipo=tag_tipo,
-        nascimento=nascimento,
-        cidade_atual=cidade_atual,
-        estado_atual=estado_atual,
         password=password,
-        telefone=telefone,
-        endereco=endereco,
     )

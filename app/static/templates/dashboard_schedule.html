@@ -2,6 +2,7 @@
     <table class="table table-primary">
         <thead>
             <tr>
+                <th scope="col">Efetivado</th>
                 <th scope="col">Origem</th>
                 <th scope="col">Data</th>
                 <th scope="col">Nome</th>
@@ -10,7 +11,7 @@
 
         <tbody class="table-hover table-group-divider">
             {% for item in list_scheduler %}
-            <tr class="">
+            <tr class="clickable-row">
                 <td scope="row"><a href="{{ item.id }}">{{ item.origem }}</a></td>
                 <td><a href="{{ item.id }}">{{ item.date_end }}</a></td>
                 <td><a href="{{ item.id }}">{{ item.name }}</a></td>
@@ -18,4 +19,41 @@
             {% endfor %}
         </tbody>
     </table>
+    <script>
+        $(document).ready(function() {
+            $(".clickable-row").click(function () {
+                var userId = $(this).data('id');
+                var category = $(this).data('category')
+
+                $.ajax({
+                    url: `/${category}/${id}`,
+                    method: 'GET',
+                    success: function(response) {
+                        $('#modal-container').html(response);
+                        $('.modal').modal('show')
+                    },
+                    error: function() {
+                        alert('Failed to load data')
+                    }
+                });
+                <!--
+                $.ajax({    
+                    To edit
+                    url: "https://your-fastapi-backend/api/resource", // Backend API endpoint
+                    method: "GET",
+                    headers: {
+                    "X-Resource-ID": resourceId, // Custom header for resource ID
+                    "Authorization": `Bearer ${sessionToken}` // Token in Authorization header
+                    },
+                    success: function (response) {
+                    console.log("Data received:", response); // Handle success
+                    },
+                    error: function (xhr, status, error) {
+                    console.error("Error:", error); // Handle errors
+                    }
+                });
+                -->
+            });
+        });
+    </script>
 </div>
